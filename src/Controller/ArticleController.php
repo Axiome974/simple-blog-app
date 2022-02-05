@@ -29,7 +29,7 @@ class ArticleController extends AbstractController
         return $this->render('article/browse.html.twig', [
             'articles'  => $articleRepository->findAll()
         ]);
-        
+    
     }
 
     /**
@@ -47,18 +47,75 @@ class ArticleController extends AbstractController
         $form = $this->createForm( ArticleType::class, $article );
         
 
-        //todo: Submit the form
+        //On map la requête avec le formulaire et les attributs de l'entité
+        $form->handleRequest($request);
+
+        if( $form->isSubmitted() && $form->isValid() ){
+
+            $entityManager->persist($article);
+            $entityManager->flush();
+
+            return $this->redirectToRoute("article_browse");
+        }
 
 
-
-
-        return $this->render('article/add.html.twig', [
+        return $this->render('base_parts/base_form.html.twig', [
             // Générer le formulaire exploitable par la vue
-            "articleForm"      => $form->createView()
+            "form"             => $form->createView(),
+            "title"            => "Ajouter un article"
         ]);
     }
 
 
-    // Todo: Edit / Read / delete
+     /**
+     * @Route("/{id}/edit", name="edit")
+     */
+    public function edit(
+        Article $article,
+        EntityManagerInterface $entityManager,
+        Request $request 
+    ): Response
+    {
+
+        // On créée le form avec le formulaire correspondant etle nouvel article 
+        $form = $this->createForm( ArticleType::class, $article );
+        
+
+        //On map la requête avec le formulaire et les attributs de l'entité
+        $form->handleRequest($request);
+
+        if( $form->isSubmitted() && $form->isValid() ){
+
+            $entityManager->persist($article);
+            $entityManager->flush();
+
+            return $this->redirectToRoute("article_browse");
+        }
+
+
+        return $this->render('base_parts/base_form.html.twig', [
+            // Générer le formulaire exploitable par la vue
+            "form"       => $form->createView(),
+            "title"             => "Modifier l'article"
+        ]);
+    }
+
+
+    /**
+     * @Route("/{id}/delete", name="delete")
+     */
+    public function delete(
+        Article $article,
+        EntityManagerInterface $entityManager
+    ){
+
+        $entityManager->remove($article);
+        $entityManager->flush();
+        return $this->redirectToRoute("article_browse");
+
+    }
+
+
+    
 
 }

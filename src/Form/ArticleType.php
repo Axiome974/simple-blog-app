@@ -19,7 +19,7 @@ class ArticleType extends AbstractType
             ->add('title', TextType::class, [
                 "label" => "Titre"
             ])
-            ->add('image', FileType::class, [
+            ->add('image', TextType::class, [
                 "label" => "Image"
             ])
             ->add('content', TextareaType::class, [
