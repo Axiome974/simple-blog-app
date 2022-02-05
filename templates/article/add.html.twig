@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Articles{% endblock %}
+
+{% block body %}
+
+    <div class="row pt-5 border-bottom-0">
+        
+        <div class="col-12">
+            <h2>Nouvel article</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        {{ form(articleForm) }}
+    </div>
+
+{% endblock %}
